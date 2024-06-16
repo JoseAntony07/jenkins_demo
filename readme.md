@@ -60,6 +60,7 @@ Description: Docker Hub credentials
 
 - https://www.youtube.com/watch?v=Sl94H5e7MPw
 - https://www.youtube.com/watch?v=leDt90jW_Gw
+- https://github.com/net-vinothkumar/cicd-k8s-demo/tree/master
 
 # Pending 
 
