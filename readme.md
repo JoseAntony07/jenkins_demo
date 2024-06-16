@@ -21,15 +21,6 @@
    - dashboard -> jenkins_demo -> configure -> pipeline
 3) Refer script (jenkins_script.txt in project folder)
 
-# Setup Minikube (https://docs.google.com/document/d/1l-0fGQ20RdFZGj-3LP68T6gXhrcptaAG3A69nooQowc/edit)
-
-1) Create kubernetes deployment file(jenkins_demo_kubernetes.yaml) -> check port both(docker and yaml) 
-2) Apply the deployment
-   - kubectl apply -f jenkins_demo_kubernetes.yaml
-3) Access the application
-   - minikube service fastapi-service
-
-
 # permission denied while trying to connect to the Docker daemon socket
 
 - sudo usermod -aG docker jenkins
@@ -52,6 +43,18 @@ Password: JayaJohn07
 ID: docker-hub-credentials (mentioned in jenkins_script.txt - must match the ID used in your pipeline)
 Description: Docker Hub credentials
 
+# Setup Minikube (https://docs.google.com/document/d/1l-0fGQ20RdFZGj-3LP68T6gXhrcptaAG3A69nooQowc/edit)
+
+1) Create kubernetes deployment file(jenkins_demo_kubernetes.yaml)
+2) Apply the deployment
+   - kubectl apply -f jenkins_demo_kubernetes.yaml
+3) Access the application
+   - minikube service jenkins-demo -n jenkins
+4) Commands
+  - kubectl apply -f jenkins_demo_kubernetes.yaml
+  - kubectl delete -f jenkins_demo_kubernetes.yaml
+  - minikube service jenkins-demo -n jenkins
+  - minikube dashboard
 
 # Reference
 
@@ -62,3 +65,16 @@ Description: Docker Hub credentials
 
 - add kube process in jenkins pipeline script
 - automate the whole process(code -> git hub -> jenkins -> dockerhub -> minikube)
+
+
+(.venv) jose-antony@joseantony-Latitude-5400:~/new projects/jenkins_demo$ minikube service jenkins-demo -n jenkins
+|-----------|--------------|-------------|---------------------------|
+| NAMESPACE |     NAME     | TARGET PORT |            URL            |
+|-----------|--------------|-------------|---------------------------|
+| jenkins   | jenkins-demo |          80 | http://192.168.49.2:31909 |
+|-----------|--------------|-------------|---------------------------|
+🎉  Opening service jenkins/jenkins-demo in default browser...
+(.venv) jose-antony@joseantony-Latitude-5400:~/new projects/jenkins_demo$ Opening in existing browser session.
+
+
+- Hit url in browser -> http://192.168.49.2:31909/docs

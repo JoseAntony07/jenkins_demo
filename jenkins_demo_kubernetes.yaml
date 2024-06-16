@@ -35,3 +35,6 @@ spec:
 
 
 # kubectl apply -f jenkins_demo_kubernetes.yaml
+# kubectl delete -f jenkins_demo_kubernetes.yaml
+# minikube service jenkins-demo -n jenkins
+# minikube dashboard
