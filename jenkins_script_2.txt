@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    environment {
+        SSH_PRIVATE_KEY = credentials('aws-ssh-key')
+        SSH_USERNAME = 'ubuntu'
+        SSH_HOST = '13.60.210.136'
+        APP_PATH = '/home/ubuntu/project/jenkins_demo'
+        VENV_PATH = '/home/ubuntu/project/env'
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                script {
+                    // Install SSH client if needed (use Jenkins agent with SSH support)
+                    sh 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Write SSH configuration to avoid host key checking
+                    sh '''
+                        mkdir -p ~/.ssh
+                        chmod 700 ~/.ssh
+                        echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config
+                        chmod 644 ~/.ssh/config
+                    '''
+
+                    // SSH into the server and deploy the FastAPI application
+                    sh '''
+                        ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME@$SSH_HOST" "
+                            source $VENV_PATH/bin/activate &&
+                            pip install -r $APP_PATH/requirements.txt &&
+                            cd $APP_PATH && git pull origin master
+                        "
+                    '''
+
+                    // Restart the services if needed (e.g., gunicorn, nginx)
+                    sh '''
+                        ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME@$SSH_HOST" "
+                            sudo supervisorctl restart fastapi &&
+                            sudo systemctl restart nginx
+                        "
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up actions, such as removing SSH configurations
+            sh 'rm -f ~/.ssh/config'
+        }
+    }
+}

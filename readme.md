@@ -51,10 +51,12 @@ Description: Docker Hub credentials
 3) Access the application
    - minikube service jenkins-demo -n jenkins
 4) Commands
+  - minikube start
+  - kubectl create namespace jenkins
   - kubectl apply -f jenkins_demo_kubernetes.yaml
   - kubectl delete -f jenkins_demo_kubernetes.yaml
-  - minikube service jenkins-demo -n jenkins
-  - minikube dashboard
+  - minikube service jenkins-demo -n jenkins   - to get server url (http://192.168.49.2:31364/docs - fastapi application)
+  - minikube dashboard - to see kube dashboard contains all service status(select jenkins in above dropdown)
 
 # Reference
 
